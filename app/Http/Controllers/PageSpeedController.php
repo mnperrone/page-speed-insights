@@ -19,27 +19,34 @@ class PageSpeedController extends Controller
 
         // Preparar los datos para la API
         $url = $request->input('url');
-        $categories = implode('&category=', $request->input('categories'));
+        $categories = implode('&category=', array_map('strtolower', $request->input('categories')));
         $strategy = $request->input('strategy');
-
-        // API Key (usa una variable de entorno)
         $apiKey = env('GOOGLE_API_KEY');
 
-        // Endpoint de la API
         $apiUrl = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={$url}&key={$apiKey}&category={$categories}&strategy={$strategy}";
 
         // Llamada a la API usando Guzzle
         $client = new Client();
         try {
             $response = $client->get($apiUrl, [
-                'verify' => false,  // Desactiva la verificación del certificado SSL
+                'verify' => false, 
             ]);
             $data = json_decode($response->getBody(), true);
+            
+            \Log::info('API Response:', $data);
 
-            // Procesar los resultados de las métricas
+            // Procesar las métricas principales
             $metrics = [];
-            foreach ($request->input('categories') as $category) {
-                $metrics[$category] = $data['lighthouseResult']['categories'][$category]['score'] ?? null;
+            if (isset($data['lighthouseResult'])) {
+                $lighthouse = $data['lighthouseResult']['audits'];
+                $metrics = [
+                    'First Contentful Paint' => $lighthouse['first-contentful-paint']['displayValue'] ?? 'No data',
+                    'Speed Index' => $lighthouse['speed-index']['displayValue'] ?? 'No data',
+                    'Time to Interactive' => $lighthouse['interactive']['displayValue'] ?? 'No data',
+                    'First Meaningful Paint' => $lighthouse['first-meaningful-paint']['displayValue'] ?? 'No data',
+                    'First CPU Idle' => $lighthouse['first-cpu-idle']['displayValue'] ?? 'No data',
+                    'Estimated Input Latency' => $lighthouse['estimated-input-latency']['displayValue'] ?? 'No data',
+                ];
             }
 
             return response()->json(['success' => true, 'metrics' => $metrics]);
