@@ -179,3 +179,8 @@ border-collapse: collapse;
 .dataTables_paginate a:hover {
     background-color: #34495e;
 }
+.error {
+            color: red; /* Texto rojo para errores */
+            font-size: 0.9em; /* Tamaño de fuente más pequeño */
+            margin-top: 5px; /* Espacio superior para separar del elemento anterior */
+        }

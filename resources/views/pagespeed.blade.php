@@ -4,22 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google PageSpeed Insights</title>
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
     <!-- jQuery y DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style></style>
     <!-- <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}"> -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/estilos.css', 'resources/js/app.js'])
     @endif 
 </head>
 <body>
-    <h1>Google PageSpeed Insights</h1>
+    <h1>Google pageSpeed Insights API</h1>
 
     <div class="form-container">
         <form id="metricsForm">
@@ -36,9 +32,10 @@
                         </div>
                     @endforeach
                 </div>
+                <div id="categoryError" class="error" style="display: none;">Por favor, seleccione al menos una categoría</div>
                 <div class="check-all-container">
                     <input type="checkbox" id="selectAll">
-                    <label for="selectAll">Check / Uncheck All</label>
+                    <label for="selectAll">Check - Uncheck All</label>
                 </div>
             </div>
 
@@ -93,6 +90,16 @@
     <script>
         $('#metricsForm').on('submit', function (e) {
             e.preventDefault();
+
+            // **Validación de categorías**
+            if ($('input[name="categories[]"]:checked').length === 0) {
+                // **Mostrar mensaje de error de categoría**
+                $('#categoryError').show();
+                return; // Detener el envío del formulario
+            } else {
+                // **Ocultar mensaje de error si hay categorías seleccionadas**
+                $('#categoryError').hide();
+            }
 
             // Mostrar el spinner de carga
             $('#loading').show();
