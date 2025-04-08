@@ -18,6 +18,7 @@ class PageSpeedController extends Controller
 
     public function getMetrics(PageSpeedRequest $request): JsonResponse
     {
+        
         $url = $request->input('url');
         $categories = $request->input('categories');
         $strategy = $request->input('strategy');

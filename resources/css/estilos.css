@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    background-color: #a7a7b3;
     color: #333;
     margin: 0;
     padding: 0;
@@ -184,3 +184,66 @@ border-collapse: collapse;
             font-size: 0.9em; /* Tamaño de fuente más pequeño */
             margin-top: 5px; /* Espacio superior para separar del elemento anterior */
         }
+.new-tabs .tab-container {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    border-bottom: 2px solid #ccc;
+}
+
+.new-tabs .tabs {
+    list-style: none;
+    padding: 0 auto 0 auto;
+    display: table;
+    margin: 0 auto 0 auto;
+    border-bottom: 1px solid #ccc;
+}
+.tabs {
+    padding: 0 auto 0 auto;
+    margin: 0 auto 0 auto;
+}
+
+.new-tabs .tabs li {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.new-tabs .tabs a {
+    text-decoration: none;
+    color: #337ab7;
+}
+
+.new-tabs .tabs li.active a {
+    color: #23527c;
+    border-bottom: 2px solid #23527c;
+}
+
+.new-tabs .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+}
+
+.new-tabs .tab.active {
+    border-bottom: 3px solid black;
+    font-weight: bold;
+}
+
+.new-tabs .tab-content {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.new-tabs .tab-content.active {
+    display: block;
+}
+
+.new-tabs .tab-pane {
+    display: none;
+}
+
+.new-tabs .tab-pane.active {
+    display: block;
+}           
+
