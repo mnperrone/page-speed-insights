@@ -23,7 +23,6 @@ class PageSpeedService
 
         try {
             $response = $this->client->get($apiUrl, ['verify' => false]);
-//            dd(json_decode($response->getBody(), true));
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             \Log::error('Error en la llamada a la API:', ['error' => $e->getMessage()]);
