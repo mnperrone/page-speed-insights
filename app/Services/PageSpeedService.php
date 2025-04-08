@@ -23,11 +23,11 @@ class PageSpeedService
 
         try {
             $response = $this->client->get($apiUrl, ['verify' => false]);
-            dd(json_decode($response->getBody(), true));
+//            dd(json_decode($response->getBody(), true));
             return json_decode($response->getBody(), true);
         } catch (\Exception $e) {
             \Log::error('Error en la llamada a la API:', ['error' => $e->getMessage()]);
-            throw new PageSpeedException('Error al llamar a la API de PageSpeed', 500, $e); 
+            throw new PageSpeedException('Error al llamar a la API de PageSpeed', 500, $e);
         }
     }
 }
