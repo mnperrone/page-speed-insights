@@ -1,0 +1,20 @@
+FROM node:18
+
+WORKDIR /var/www/html
+
+# 1. Copiar solo archivos necesarios para npm install
+COPY package.json .
+COPY package-lock.json .
+COPY vite.config.js .
+
+# 2. Instalar dependencias
+RUN npm install
+
+# 3. Copiar el resto de archivos
+COPY . .
+
+# 4. Exponer puerto de Vite
+EXPOSE 5173
+
+# 5. Comando para desarrollo
+CMD ["npm", "run", "dev"]
