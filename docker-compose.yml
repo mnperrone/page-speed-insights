@@ -6,8 +6,12 @@ services:
         ports:
             - "8000:80"
         volumes:
-            - .:/var/www/html
-            - ./storage:/var/www/html/storage
+            - .:/var/www/html  # Mapeo completo
+            - ./docker/laravel:/var/www/html/docker/laravel
+            - ./docker/composer:/tmp/composer
+            - ./docker/phpunit:/tmp/phpunit
+            - ./docker/phpunit-coverage:/tmp/phpunit-coverage
+            - ./docker/phpunit-cache:/tmp/phpunit-cache
             - composer-cache:/tmp/composer-cache
         environment:
             - DB_HOST=mysql
