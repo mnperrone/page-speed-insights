@@ -60,7 +60,6 @@ class PageSpeedController extends Controller
         try {
             $data = $request->all();
             
-            // Validar que los datos requeridos estén presentes
             if (empty($data['url']) || empty($data['strategy']) || empty($data['categories_list'])) {
                 throw new \Exception('Datos incompletos para guardar los resultados');
             }
@@ -85,26 +84,35 @@ class PageSpeedController extends Controller
             }
 
 
-            // Preparar los datos para guardar
+            // Convert timestamp to MySQL format
+            $timestamp = $data['analysisUTCTimestamp'] ?? now();
+            if (is_string($timestamp)) {
+                $timestamp = new \DateTime($timestamp);
+            }
+            $mysqlTimestamp = $timestamp->format('Y-m-d H:i:s');
+            
+            // Prepare data for saving
             $metricsData = [
                 'url' => $data['url'],
                 'strategy_id' => $strategy->id,
-                'analysis_utc_timestamp' => $data['analysisUTCTimestamp'] ?? now(),
+                'analysis_utc_timestamp' => $mysqlTimestamp,
                 'lighthouse_version' => $data['lighthouseVersion'] ?? null,
                 'final_url' => $data['finalUrl'] ?? $data['url'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
 
-            // Agregar métricas de categorías
-            if (!empty($data['categories'])) {
+            // Add category metrics
+            if (!empty($data['categories']) && is_array($data['categories'])) {
                 foreach ($data['categories'] as $category => $categoryData) {
-                    $field = strtolower($category) . '_metric';
-                    $metricsData[$field] = $categoryData['score'] * 100; // Convertir a porcentaje
+                    if (is_array($categoryData) && isset($categoryData['score'])) {
+                        $field = strtolower($category) . '_metric';
+                        $metricsData[$field] = $categoryData['score'] * 100; // Convert to percentage
+                    }
                 }
             }
 
-            // Agregar métricas detalladas
+            // Add detailed metrics
             if (!empty($data['metrics'])) {
                 foreach ($data['metrics'] as $metric => $metricData) {
                     $field = strtolower(str_replace('.', '_', $metric));
@@ -112,7 +120,7 @@ class PageSpeedController extends Controller
                 }
             }
 
-            // Agregar datos de experiencia de carga
+            // Add loading experience data
             if (!empty($data['loadingExperience'])) {
                 $loadingExp = $data['loadingExperience'];
                 $metricsData['loading_experience_metric'] = $loadingExp['metric'] ?? null;

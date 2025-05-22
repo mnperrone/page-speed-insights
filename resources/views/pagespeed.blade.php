@@ -334,7 +334,10 @@
                             // Mostrar el contenedor de resultados
                             $('#resultsContainer').show();
                             
-                            // Mostrar el botón de guardar
+                            // Mostrar y resetear el botón de guardar
+                            const $saveBtn = $('#saveBtn');
+                            $saveBtn.prop('disabled', false)
+                                   .html('<i class="fas fa-save"></i> Guardar Resultados');
                             $('#saveResultsContainer').show();
                             $('#saveStatus').empty();
 
