@@ -13,3 +13,9 @@ Route::post('/get-metrics', [PageSpeedController::class, 'getMetrics'])->name('g
 
 // Ruta para guardar resultados
 Route::post('/save-results', [PageSpeedController::class, 'saveResults'])->name('saveResults');
+
+// Ruta para obtener el historial de métricas
+Route::get('/metrics-history', [PageSpeedController::class, 'getMetricsHistory'])->name('getMetricsHistory');
+
+// Ruta para eliminar una métrica
+Route::delete('/metrics-history/{id}', [PageSpeedController::class, 'deleteMetric'])->name('deleteMetric');
